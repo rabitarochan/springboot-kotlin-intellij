@@ -1,16 +1,22 @@
 buildscript {
 	ext {
 		springBootVersion = '1.3.1.RELEASE'
+		// (1) Kotlin のバージョンを指定
+		kotlinVersion = '1.0.0-beta-4584'
 	}
 	repositories {
 		mavenCentral()
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		// (2) Kotlin の Gradle plugin を追加
+		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
 	}
 }
 
 apply plugin: 'java'
+// (3) Kotlin plugin を有効化
+apply plugin: 'kotlin'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot' 
@@ -28,12 +34,21 @@ repositories {
 
 
 dependencies {
+	// (4) Kotlin のライブラリを参照追加
+	compile("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
 	compile('org.springframework.boot:spring-boot-devtools')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
 }
 
+// (5) IntelliJ IDEA 用の設定を追加
+idea {
+	module {
+		inheritOutputDirs = false
+		outputDir = file("$buildDir/classes/main/")
+	}
+}
 
 eclipse {
 	classpath {
